@@ -9,6 +9,7 @@ class EmployeeListComponents extends React.Component {
     };
     this.addEmployee = this.addEmployee.bind(this);
     this.editEmployee = this.editEmployee.bind(this);
+    this.deleteEmployee = this.deleteEmployee.bind(this);
   }
 
   componentDidMount() {
@@ -19,8 +20,20 @@ class EmployeeListComponents extends React.Component {
   addEmployee() {
     this.props.history.push("/createEmployee/_add");
   }
-  editEmployee(id){
+  editEmployee(id) {
     this.props.history.push(`/createEmployee/${id}`);
+  }
+  deleteEmployee(id) {
+    EmployeesServices.deleteEmployee(id).then((res) => {
+      this.setState({
+        employees: this.state.employees.filter(
+          (employee) => employee.id !== id
+        ),
+      });
+    });
+  }
+  viewEmployee(id) {
+    this.props.history.push(`/viewEmployee/${id}`);
   }
 
   render() {
@@ -30,7 +43,8 @@ class EmployeeListComponents extends React.Component {
         <div className="btn btn-primary" onClick={this.addEmployee}>
           Add Employee
         </div>
-
+        <br />
+        <br></br>
         <table className="table table-striped table-bordered">
           <thead>
             <tr>
@@ -53,6 +67,20 @@ class EmployeeListComponents extends React.Component {
                     className="btn btn-info"
                   >
                     Update
+                  </button>
+                  <button
+                    style={{ marginLeft: "10px" }}
+                    onClick={() => this.deleteEmployee(employee.id)}
+                    className="btn btn-danger"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    style={{ marginLeft: "10px" }}
+                    onClick={() => this.viewEmployee(employee.id)}
+                    className="btn btn-info"
+                  >
+                    View
                   </button>
                 </td>
               </tr>
